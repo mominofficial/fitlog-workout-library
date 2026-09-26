@@ -1,5 +1,3 @@
-import { Workout } from "./types";
-
 export const STORAGE_KEYS = {
   PLAN: "fitlog-plan",
   SAVED: "fitlog-saved",

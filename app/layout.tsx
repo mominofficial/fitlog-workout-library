@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { FitLogProvider } from "@/lib/context";
@@ -26,7 +26,12 @@ export const metadata: Metadata = {
   },
   keywords: ["fitlog", "workout library", "gym companion", "fitness", "training", "exercise log"],
   authors: [{ name: "FitLog" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

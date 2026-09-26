@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useCallback, useId } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { Workout, ToastMessage, FitLogContextType } from "./types";
 import { STORAGE_KEYS, getStoredItem, setStoredItem } from "./storage";
 import { fetchWorkouts } from "./api";
@@ -33,24 +33,28 @@ export function FitLogProvider({ children }: { children: React.ReactNode }) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  // Hydrate from localStorage
+  // Hydrate from localStorage asynchronously
   useEffect(() => {
-    try {
-      const storedPlan = getStoredItem<Workout[]>(STORAGE_KEYS.PLAN, []);
-      const storedSaved = getStoredItem<Workout[]>(STORAGE_KEYS.SAVED, []);
-      const storedCompleted = getStoredItem<number[]>(STORAGE_KEYS.COMPLETED, []);
+    const timer = setTimeout(() => {
+      try {
+        const storedPlan = getStoredItem<Workout[]>(STORAGE_KEYS.PLAN, []);
+        const storedSaved = getStoredItem<Workout[]>(STORAGE_KEYS.SAVED, []);
+        const storedCompleted = getStoredItem<number[]>(STORAGE_KEYS.COMPLETED, []);
 
-      setPlan(Array.isArray(storedPlan) ? storedPlan : []);
-      setSaved(Array.isArray(storedSaved) ? storedSaved : []);
-      setCompletedIds(Array.isArray(storedCompleted) ? storedCompleted : []);
-    } catch (e) {
-      console.error("Hydration error:", e);
-    } finally {
-      setHydrated(true);
-    }
+        setPlan(Array.isArray(storedPlan) ? storedPlan : []);
+        setSaved(Array.isArray(storedSaved) ? storedSaved : []);
+        setCompletedIds(Array.isArray(storedCompleted) ? storedCompleted : []);
+      } catch (e) {
+        console.error("Hydration error:", e);
+      } finally {
+        setHydrated(true);
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  // Fetch Workouts
+  // Fetch Workouts function for retries/refreshes
   const loadWorkouts = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -65,9 +69,34 @@ export function FitLogProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Initial fetch on mount
   useEffect(() => {
-    loadWorkouts();
-  }, [loadWorkouts]);
+    let active = true;
+
+    async function initialFetch() {
+      try {
+        const data = await fetchWorkouts();
+        if (active) {
+          setWorkouts(data);
+        }
+      } catch (err: unknown) {
+        if (active) {
+          const message = err instanceof Error ? err.message : "Failed to load workouts";
+          setError(message);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    initialFetch();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Sync Plan to localStorage
   useEffect(() => {

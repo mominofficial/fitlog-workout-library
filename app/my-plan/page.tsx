@@ -24,7 +24,6 @@ export default function MyPlanPage() {
   const {
     plan,
     saved,
-    completedIds,
     removeFromPlan,
     removeSaved,
     addToPlan,

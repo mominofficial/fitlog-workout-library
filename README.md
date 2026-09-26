@@ -192,6 +192,13 @@ npx vercel --prod
 
 ---
 
+## Live Deployment
+
+- **Production URL**: [https://fitlog-nu-seven.vercel.app](https://fitlog-nu-seven.vercel.app)
+- **GitHub Repository**: [https://github.com/mominofficial/fitlog-workout-library](https://github.com/mominofficial/fitlog-workout-library)
+
+---
+
 ## License
 
 MIT © 2026 FitLog. Train hard, log honest.

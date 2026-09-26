@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0F1115;
+  --background-deep: #090A0D;
+  --surface: #15171D;
+  --surface-2: #13161D;
+  --surface-3: #151921;
+  --border: #1F242D;
+  --text: #FFFFFF;
+  --text-secondary: #E5E7EB;
+  --muted: #9CA3AF;
+  --muted-2: #8A92A0;
+  --muted-light: #D1D5DB;
+  --accent: #CCFF00;
+  --accent-2: #C2F800;
 }
 
-@theme inline {
+@theme {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background-deep: var(--background-deep);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-secondary);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-muted-light: var(--muted-light);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --font-oswald: var(--font-oswald), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom athletic dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2E3644;
+}
+
+/* Selection */
+::selection {
+  background: #CCFF00;
+  color: #000000;
+}
+
+/* Typography utility classes */
+.font-display {
+  font-family: var(--font-oswald), sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-inter), sans-serif;
 }
